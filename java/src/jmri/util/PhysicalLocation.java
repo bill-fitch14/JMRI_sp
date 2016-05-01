@@ -81,9 +81,9 @@ public class PhysicalLocation extends Vector3f {
             return (loc);
         }
         PhysicalLocation rv = new PhysicalLocation();
-        rv.setX(loc.getX() - ref.getX());
-        rv.setY(loc.getY() - ref.getY());
-        rv.setZ(loc.getZ() - ref.getZ());
+        rv.setX1(loc.getX1() - ref.getX1());
+        rv.setY1(loc.getY1() - ref.getY1());
+        rv.setZ1(loc.getZ1() - ref.getZ1());
         return (rv);
     }
 
@@ -186,7 +186,7 @@ public class PhysicalLocation extends Vector3f {
      * @return String "(X, Y, Z)"
      */
     public String toString() {
-        String s = "(" + this.getX() + ", " + this.getY() + ", " + this.getZ() + ")";
+        String s = "(" + this.getX1() + ", " + this.getY1() + ", " + this.getZ1() + ")";
         if (_isTunnel) {
             s += "(tunnel)";
         }
@@ -232,9 +232,9 @@ public class PhysicalLocation extends Vector3f {
      * Constructor from X, Y, Z (float)
      */
     public PhysicalLocation(float x, float y, float z) {
-        setX(x);
-        setY(y);
-        setZ(z);
+        setX1(x);
+        setY1(y);
+        setZ1(z);
         _isTunnel = false;
 
     }
@@ -259,14 +259,14 @@ public class PhysicalLocation extends Vector3f {
      * Copy Constructor
      */
     public PhysicalLocation(PhysicalLocation p) {
-        super(p.getX(), p.getY(), p.getZ());
+        super(p.getX1(), p.getY1(), p.getZ1());
         _isTunnel = p.isTunnel();
     }
 
     /**
      * Get X dimension
      */
-    public float getX() {
+    public float getX1() {
         this.get(f);
         return (f[0]);
     }
@@ -274,7 +274,7 @@ public class PhysicalLocation extends Vector3f {
     /**
      * Set X dimension
      */
-    public void setX(float x) {
+    public void setX1(float x) {
         this.get(f);
         f[0] = x;
         this.set(f);
@@ -283,7 +283,7 @@ public class PhysicalLocation extends Vector3f {
     /**
      * Get Y dimension
      */
-    public float getY() {
+    public float getY1() {
         this.get(f);
         return (f[1]);
     }
@@ -291,7 +291,7 @@ public class PhysicalLocation extends Vector3f {
     /**
      * Set Y dimension
      */
-    public void setY(float y) {
+    public void setY1(float y) {
         this.get(f);
         f[1] = y;
         this.set(f);
@@ -300,7 +300,7 @@ public class PhysicalLocation extends Vector3f {
     /**
      * Get Z dimension
      */
-    public float getZ() {
+    public float getZ1() {
         this.get(f);
         return (f[2]);
     }
@@ -308,7 +308,7 @@ public class PhysicalLocation extends Vector3f {
     /**
      * Set Z dimension
      */
-    public void setZ(float z) {
+    public void setZ1(float z) {
         this.get(f);
         f[2] = z;
         this.set(f);
@@ -326,9 +326,9 @@ public class PhysicalLocation extends Vector3f {
      * equals()
      */
     public Boolean equals(PhysicalLocation l) {
-        if ((this.getX() == l.getX())
-                && (this.getY() == l.getY())
-                && (this.getZ() == l.getZ())
+        if ((this.getX1() == l.getX1())
+                && (this.getY1() == l.getY1())
+                && (this.getZ1() == l.getZ1())
                 && (this.isTunnel() == l.isTunnel())) {
             return (true);
         } else {
@@ -353,9 +353,9 @@ public class PhysicalLocation extends Vector3f {
             return;
         }
 
-        this.setX(this.getX() - ref.getX());
-        this.setY(this.getY() - ref.getY());
-        this.setZ(this.getZ() - ref.getZ());
+        this.setX1(this.getX1() - ref.getX1());
+        this.setY1(this.getY1() - ref.getY1());
+        this.setZ1(this.getZ1() - ref.getZ1());
     }
 
     private static final Logger log = LoggerFactory.getLogger(PhysicalLocation.class.getName());

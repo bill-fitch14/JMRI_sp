@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/src"/>
+	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jmri/lib/windows/x64"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/test"/>
 	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/tmp"/>
 	<classpathentry excluding="**/Thumbs.db" kind="src" path="resources"/>
@@ -66,5 +70,6 @@
 	<classpathentry kind="lib" path="lib/pi4j-device.jar"/>
 	<classpathentry kind="lib" path="lib/pi4j-gpio-extension.jar"/>
 	<classpathentry kind="lib" path="lib/pi4j-service.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Bill/eclipse-mars/jar_files1/control.jar"/>
 	<classpathentry kind="output" path="java/classes"/>
 </classpath>
