@@ -21,7 +21,7 @@ class BackAndForthTimed(jmri.jmrit.automat.AbstractAutomaton) :
 		print "Inside init(self)"
 
 		# get loco address. For long address change "False" to "True" 
-		self.throttle = self.getThrottle(14, False)  # short address 14
+		self.throttle = self.getThrottle(3, False)  # short address 14
 
 		return
 
@@ -40,7 +40,7 @@ class BackAndForthTimed(jmri.jmrit.automat.AbstractAutomaton) :
 
 		# wait for run time in forward direction
 		print "Wait for forward time"
-		self.waitMsec(10000)
+		self.waitMsec(2000)
 		
 		# stop the engine
 		print "Set Speed Stop"
@@ -60,7 +60,7 @@ class BackAndForthTimed(jmri.jmrit.automat.AbstractAutomaton) :
 
 		# wait for run time in reverse direction
 		print "Wait for reverse time"
-		self.waitMsec(10000)
+		self.waitMsec(2000)
 		print "Set Speed Stop"
 		self.throttle.setSpeedSetting(0)
 		

@@ -3,6 +3,7 @@
 	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/src">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jmri/lib/windows/x64"/>
+			<attribute name="ignore_optional_problems" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry excluding="**/.cvsignore|**/COPYING" kind="src" path="java/test"/>
@@ -53,7 +54,7 @@
 	<classpathentry kind="lib" path="lib/bluecove-2.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/bluecove-bluez-2.1.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/bluecove-gpl-2.1.1-SNAPSHOT.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="lib/javax.servlet-api-3.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-http-9.3.6.v20151106.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-io-9.3.6.v20151106.jar"/>
@@ -70,6 +71,6 @@
 	<classpathentry kind="lib" path="lib/pi4j-device.jar"/>
 	<classpathentry kind="lib" path="lib/pi4j-gpio-extension.jar"/>
 	<classpathentry kind="lib" path="lib/pi4j-service.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Bill/eclipse-mars/jar_files1/control.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/control"/>
 	<classpathentry kind="output" path="java/classes"/>
 </classpath>

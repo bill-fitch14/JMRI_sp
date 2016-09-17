@@ -13,11 +13,15 @@ class setStartup(jmri.jmrit.automat.AbstractAutomaton) :
   def init(self):
     return
   def handle(self):
-    turnouts.provideTurnout("1").setState(THROWN)
-    self.waitMsec(50)         # time is in milliseconds
-    turnouts.provideTurnout("5").setState(CLOSED)
-    self.waitMsec(50)
-    turnouts.provideTurnout("19").setState(THROWN)
+    turnouts.provideTurnout("MT+10").setState(THROWN)
+    self.waitMsec(5000)         # time is in milliseconds
+    turnouts.provideTurnout("MT+10").setState(CLOSED)
+    self.waitMsec(5000)
+    turnouts.provideTurnout("MT+10").setState(THROWN)
+    self.waitMsec(5000)         # time is in milliseconds
+    turnouts.provideTurnout("MT+20").setState(CLOSED)
+    self.waitMsec(5000)
+    turnouts.provideTurnout("MT+20").setState(THROWN)
     return False              # all done, don't repeat again
 
 setStartup().start()          # create one of these, and start it running

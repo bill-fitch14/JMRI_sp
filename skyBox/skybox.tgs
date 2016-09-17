@@ -1,0 +1,43 @@
+
+; skybox.tgs
+; Andrew Davison, September 2006, ad@fivedots.coe.psu.ac.th
+
+; Generate six BMP images for the faces of a skybox.
+; Based on a script from 
+; http://developer.valvesoftware.com/wiki/Creating_a_2D_skybox_with_Terragen
+
+
+; where to store, name, and number the saved BMP files
+; **NOTE:** adjust this path to suit your set-up
+InitAnim "C:\sky", 1
+
+; front facing snap
+Zoom 1.0
+; CamOri head, pitch, bank
+CamOri 0, 0, 0
+frend
+
+; right
+Zoom 1.0
+CamOri 90, 0, 0
+frend
+
+; back
+Zoom 1.0
+CamOri 180, 0, 0
+frend
+
+; left
+Zoom 1.0
+CamOri 270, 0, 0
+frend
+
+; above
+Zoom 1.0
+CamOri 270, 90, 0
+frend
+
+; down
+Zoom 1.0
+CamOri 270, -90, 0
+frend

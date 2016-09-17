@@ -7,6 +7,7 @@
 #
 
 import jmri
+import java
 
 from org.apache.log4j import Logger
 
@@ -35,7 +36,7 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
         #perform actions that need to be in a thread, such as loco acquisition 
         def init(self):
 #             logger.debug("Inside Automaton.init("+self.sensorName+","+str(self.throttleAddress)+","+self.fnKeyName+")")
-            self.throttle = self.getThrottle(self.throttleAddress, True)
+            self.throttle = self.getThrottle(self.throttleAddress, False)
             # actually attach the sensor to the loco
             ThrottleFunctionForSensorListener().setup(self.sensorName, self.throttle, self.fnKeyName)
             return    
@@ -52,6 +53,6 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
 logger = Logger.getLogger("jmri.jmrit.jython.exec.ThrottleFunctionForSensor")
 
 #connect each sensor to its loco and function, repeat as needed
-Automaton().setup("LS1003", 909, "F1")  #horn for address 909
-Automaton().setup("LS1004", 909, "F0")  #lights for same loco
+Automaton().setup("MS-N257E3", 3, "F1")  #horn for address 909
+# Automaton().setup("LS1004", 909, "F0")  #lights for same loco
 

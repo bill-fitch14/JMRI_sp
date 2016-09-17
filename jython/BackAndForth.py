@@ -20,11 +20,11 @@ class Test14(jmri.jmrit.automat.AbstractAutomaton) :
 
 		# set up sensor numbers
 		# fwdSensor is reached when loco is running forward
-		self.fwdSensor = sensors.provideSensor("513")
-		self.revSensor = sensors.provideSensor("520")
+		self.fwdSensor = sensors.provideSensor("MS-N257E3")
+		self.revSensor = sensors.provideSensor("MS-N257E1")
 
 		# get loco address. For long address change "False" to "True" 
-		self.throttle = self.getThrottle(14, False)  # short address 14
+		self.throttle = self.getThrottle(3, False)  # short address 14
 
 		return
 
@@ -39,18 +39,18 @@ class Test14(jmri.jmrit.automat.AbstractAutomaton) :
 		# wait 1 second for layout to catch up, then set speed
 		self.waitMsec(1000)                 
 		print "Set Speed"
-		self.throttle.setSpeedSetting(0.7)
+		self.throttle.setSpeedSetting(0.01)
 
 		# wait for sensor in forward direction to trigger, then stop
 		print "Wait for Forward Sensor"
 		self.waitSensorActive(self.fwdSensor)
 		print "Set Speed Stop"
 		self.throttle.setSpeedSetting(0)
-
+		self.throttle.debuggingWait()
 		# delay for a time (remember loco could still be moving
 		# due to simulated or actual inertia). Time is in milliseconds
 		print "wait 20 seconds"
-		self.waitMsec(20000)          # wait for 20 seconds
+		self.waitMsec(5000)          # wait for 20 seconds
 		
 		# turn on whistle, set direction to reverse, set speed
 		self.throttle.setF3(True)     # turn on whistle
@@ -62,7 +62,7 @@ class Test14(jmri.jmrit.automat.AbstractAutomaton) :
 		self.throttle.setIsForward(False)
 		self.waitMsec(1000)                 # wait 1 second for Xpressnet to catch up
 		print "Set Speed"
-		self.throttle.setSpeedSetting(0.7)
+		self.throttle.setSpeedSetting(0.1)
 
 		# wait for sensor in reverse direction to trigger
 		print "Wait for Reverse Sensor"
@@ -73,14 +73,15 @@ class Test14(jmri.jmrit.automat.AbstractAutomaton) :
 		# delay for a time (remember loco could still be moving
 		# due to simulated or actual inertia). Time is in milliseconds
 		print "wait 20 seconds"
-		self.waitMsec(20000)          # wait for 20 seconds
+		self.waitMsec(5000)          # wait for 20 seconds
 		
 		# turn on whistle, set direction to forward, set speed
 		self.throttle.setF3(True)     # turn on whistle
 		self.waitMsec(1000)           # wait for 1 seconds
 		self.throttle.setF3(False)    # turn off whistle
 		self.waitMsec(1000)           # wait for 1 second
-
+		self.throttle.setIsForward(True)
+		self.waitMsec(1000)
 		# and continue around again
 		print "End of Loop"
 		return 1	
