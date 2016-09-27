@@ -14,6 +14,7 @@ import time
 
 from org.apache.log4j import Logger
 from java.lang import Thread, InterruptedException  
+from telnetlib import theNULL
     
 
 # Define one sensor listener. 
@@ -237,15 +238,20 @@ class CheckSensors(jmri.jmrit.automat.AbstractAutomaton) :
                 time.sleep(10)
             print self.sensorAddress , "self.sensor != None"
             print "About to wait for sensor ", self.sensorAddress
-            self.waitSensorActive(self.sensor)
+            self.waitSensorChange(self.sensor)
             print "Sensor detected ", self.sensorAddress
             print "YippeewaitedForSensor", self.sensorAddress
             millis = int(round(time.time() * 1000))
-            jlo.setSensor(millis)
+            if jlo == None:
+                print "jlo is null"
+            else:
+                print "jlo is not null"
+                print dir(jlo)
+            jlo.setSensor(self.sensorAddress, millis)
 #             c = Main.lo.setSensor(self.sensorAddress,millis)
             # handle() is called repeatedly until it returns false.
             print "Inside handle(CheckSensorRev)"
-            return 0    
+            return 1    
             # (requires JMRI to be terminated to stop - caution
 
         
@@ -377,6 +383,13 @@ q.setup(3)
 
 Main.lo.addPropertyChangeListener(q)
 Main.runFSM()
+
+jlo=listenerObjects()
+r = SensorListenerDetectHectors()
+# r.setup()
+jlo.addPropertyChangeListener(r)
+
+
 rev1 = aaSetupSensors("MS-N257E1")
 rev1.run()
 fwd1 = aaSetupSensors("MS+N257E1")
@@ -392,7 +405,4 @@ fwd2.run()
 # fwd2.run()
 # rev2 = aaSetupSensors("rev2")
 # rev2.run()
-jlo=listenerObjects()
-r = SensorListenerDetectHectors()
-# r.setup()
-jlo.addPropertyChangeListener(r)
+
