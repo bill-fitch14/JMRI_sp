@@ -41,4 +41,6 @@ print "Finished setting the turnout"
 # remove the listener
 t.removePropertyChangeListener(m)
 
- 
+# https://docs.oracle.com/javase/tutorial/uiswing/events/propertychangelistener.html
+
+# https://github.com/JMRI/JMRI/blob/master/jython/ListenerExample.py

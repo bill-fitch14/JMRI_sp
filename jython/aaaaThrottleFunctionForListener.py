@@ -14,30 +14,7 @@ from org.apache.log4j import Logger
 # Define one sensor listener. 
 class ThrottleFunctionForSensorListener(java.beans.PropertyChangeListener):
   automaton = None  #make a spot to remember the throttle object that was passed in
-#   waitMsec = None
-#   fnKey = None
-#   def setup(self, sensor,  throttle, fnKey) :
-#     print 'entering ThrottleFunctionForSensorListener setup'
-#     if (sensor == None) : 
-#         print 'sensor is None'
-#         return
-#     if (throttle == None) : 
-#         print 'throttle is None'
-#         return
-# #     self.automaton = automaton
-#     self.throttle = throttle  #store for use later
-# #     self.fnKey = fnKey  #store for use later
-#     self.throttle.setSpeedSetting(0)
-#     self.throttle.setIsForward(True)
-#     
-#     self.throttle.setSpeedSetting(0.01)
-    
-#     self.waitMsec(500)                 # wait 1 second for Xpressnet to catch up
 
-#     print 'about to set listener object'
-# #     listenerObj.addPropertyChangeListener(self)
-#     print 'set listener object'
-#     return
   def setup(self,  throttleAddress):
     th=Automaton()
     th.start()
@@ -100,17 +77,7 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
             print 'self.throttle1 is not None'
         
         return  
-
-    #pass and store needed values for this instance, then start the thread
-#     def setup(self, sensorName, throttleAddress, fnKeyName):
-#         self.sensorName = sensorName
-#         self.throttleAddress = throttleAddress           
-#         self.fnKeyName = fnKeyName           
-#         self.start()
-#         self.waitMsec(10000)  #give it a chance to happen
-#         
-#         return
-        
+       
     def moveLoco(self,ForwardReverse, ThrottleValue):
         print "move loco"
 #         self.start()
@@ -125,14 +92,14 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
         else:
             print "self.throttle is not None"
         
-        self.throttle.setSpeedSetting(0) 
-        self.waitMsec(500) 
+#         self.throttle.setSpeedSetting(0) 
+#         self.waitMsec(500) 
         print " 3Set Speed finished"
         print " 4move Loco Forward" + "   Forwardreverse:" + str(ForwardReverse) + "   ThrottleValue" +str(ThrottleValue)
         self.throttle.setIsForward(ForwardReverse)
         print " 5MoveLoco2"
 #         # wait 1 second for engine to be stopped, then set speed
-        self.waitMsec(500)                 
+#         self.waitMsec(500)                 
         print " 6move loco set speed" + "   Forwardreverse:" + str(ForwardReverse) + "   ThrottleValue" +str(ThrottleValue)
         self.throttle.setSpeedSetting(0.01) 
         print "moveloco finished"
