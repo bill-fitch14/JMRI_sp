@@ -1,0 +1,86 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__46 (3) to come 
+#
+newmtl brickwall.m.tbum
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+bump -s 0.0 0.0 1.0 TGM3_101.TGA
+#
+newmtl 2.m.onetex
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+#
+newmtl 3.m.reflect
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  0.6
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+#
+# Multi/Sub Material__46 done 
+#
+# Multi/Sub Material__35 (5) to come 
+#
+newmtl brickwall.m.tbum
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+bump -s 0.0 0.0 1.0 TGM3_101.TGA
+#
+newmtl 4.m.onetex
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+map_d TGM3_101.BMP
+#
+newmtl 5.m.reflect
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+#
+newmtl 2.m.onetex
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+#
+newmtl 3.m.reflect
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  0.6
+Ns  10.0
+illum 2
+map_Kd TGM3_101.JPG
+#
+# Multi/Sub Material__35 done 
+#
+# EOF

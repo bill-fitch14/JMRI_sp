@@ -157,7 +157,7 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
         return 
     
     def setSpeed(self, ThrottleValue):
-        global engineSpeed #need to declare as global in each function that assigns to it
+        global engineSpeed  # need to declare as global in each function that assigns to it
         
         
         # wait 1 second for engine to be stopped, then set speed
@@ -236,6 +236,20 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
 #     event.propertyName == "MS+N257E3" ): 
 #     and event.newValue != 0: 
     # print event.propertyName , "detected at ", event.newValue , " millis"
+    if event.propertyName == "SENR1":
+        print "propertyName" + event.propertyName, " revStart ", event.newValue
+        self.simRevStart = event.newValue
+        self.speedatSENR1 = U4_Constants.speed
+        print "self.speedatSENR1: ", self.speedatSENR1
+        return
+    
+    if event.propertyName == "SENR2":
+        print "propertyName" + event.propertyName, " revStart ", event.newValue
+        self.simRevEnd = event.newValue
+        self.speedatSENR2 = U4_Constants.speed
+        print "self.speedatSENR2: ", self.speedatSENR2
+        self.processSENR2()
+        return
     
     if event.propertyName == "MS+N257E3":
         print "propertyName" + event.propertyName, " revStart ", event.newValue
@@ -248,15 +262,17 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
         print "propertyName" + event.propertyName, " revEnd ", event.newValue
         print "self.speedatplusN257E3: ", self.speedatplusN257E3
         self.revEnd = event.newValue
-        
-        
+        self.processMSN257E1()
+        return
     else:
 #         print "propertyName" + event.propertyName, " newValue ", event.newValue
 #         print "stopping not calling adaption"
         return
-#     if self.revStart < self.revEnd:
-#         self.revTime = self.revEnd - self.revStart
-#     else:
+    
+  def processSENR2(self):
+      print "Hi in processSENR2"
+
+  def processMSN257E1(self):
     if self.revStart == None:
         self.revEnd = None
         print "self.revStart is ", self.revStart, " returning"
