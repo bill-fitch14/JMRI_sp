@@ -19,6 +19,8 @@ from mytrack import U4_Constants, E1_TNodeNames
 from org.apache.log4j import Logger
 from sm2 import Main
 from sm2 import E1
+from A_Inglenook import CreateTrainMovementDeque
+# import winsound
 
 
 # import aaSetupSensors
@@ -59,69 +61,14 @@ def mprint(*args):
             print(arg),
         print("")
         
-# Define one sensor listener. 
-class ThrottleFunctionForSensorListener(java.beans.PropertyChangeListener):
-  automaton = None  # make a spot to remember the throttle object that was passed in
-
-
-  def setup(self, throttleAddress):
-    th = Automaton()
-    th.start()
-    #   th.setup("MS-N257E3", 3, "F1")  #horn for address 909
-    self.automaton = th
-#   if (self.automaton == None) : 
-#     #dprint( 'self.throttle is None in setup')
-#   else:
-#     #dprint( 'self.throttle is not None')
-#   return
-#   fwd1 = aaSetupSensors("fwd1")
-#   fwd1.run()
+NDEBUG = True        
+def nprint(*args):
+    if (NDEBUG):
+        for arg in args:
+            print(arg),
+        print("")
+        
   
-  
-  
-  
-  def propertyChange(self, event):
-  
-    mprint("  entered property change")
-    mprint("propertyName" + event.propertyName)
-    mprint("oldVal", event.oldValue, "newVal", event.newValue)
-    if event.propertyName == "property1" and event.newValue == 0: 
-        turnouts.provideTurnout("MT+10").setState(CLOSED)
-        mprint("turnouts.provideTurnout(MT+10).setState(CLOSED)") 
-    elif event.propertyName == "property1" and event.newValue == 1:
-        turnouts.provideTurnout("MT+10").setState(THROWN)
-        mprint("turnouts.provideTurnout(MT+10).setState(THROWN)")
-    elif event.propertyName == "property2" and event.newValue == 0:
-        turnouts.provideTurnout("MT+20").setState(CLOSED)
-        mprint("turnouts.provideTurnout(MT+20).setState(CLOSED)")
-    elif event.propertyName == "property2" and event.newValue == 1:
-        turnouts.provideTurnout("MT+20").setState(THROWN)
-        mprint("turnouts.provideTurnout(MT+20).setState(THROWN)")
-
-    elif event.propertyName == "locoSetDirection" and (event.newValue == 0 or event.newValue == 1) : 
-        mprint("Set Loco Forward")
-        if (self.automaton == None) : 
-          dprint('automation is None')
-        self.automaton.setDirection(event.newValue)
-  
-    elif event.propertyName == "locoSetSpeed" and event.newValue >= 0 and event.newValue <= 1 :
-        mprint('SetSpeed')
-        self.automaton.setSpeed(event.newValue)
-    elif event.propertyName == "loco1SetSpeedZero" and event.newValue >= 0 and event.newValue <= 1 :
-        mprint('SetSpeedZero' + str(event.newValue))
-        self.automaton.setSpeed(event.newValue)
-#     elif event.propertyName == "loco1F" and event.newValue > 0 and event.newValue <= 1 : 
-#         mprint("Set Loco Forward event.newValue = " + str(event.newValue))
-#         if (self.automaton == None) : 
-#             dprint('automation is None')
-#         self.automaton.moveLoco(True, event.newValue)
-#     elif event.propertyName == "loco1R" and event.newValue > 0 and event.newValue <= 1 :
-#         mprint("Set loco Reverse event.newValue = " + str(event.newValue))
-#         self.automaton.moveLoco(False, event.newValue)
-    elif event.propertyName == "pause" and event.newValue >= 0 and event.newValue <= 10000 :   
-        mprint('event.propertyName == "pause"')
-        self.automaton.pause(0)
-    return    
 
 class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
   
@@ -140,8 +87,14 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
         while self.throttle == None:
            self.waitMsec(1) 
 #         self.waitMsec(500)  # give it a chance to happen
+        self.throttle
         dprint("in init setting speed 0")
         self.setSpeed(0)
+        # turn lights on
+        self.fnKeyName = "F0"
+        funcName = "set" + self.fnKeyName 
+        func = getattr(self.throttle, funcName)
+        func(True)
     #     if self.throttle==None:
     #       #dprint( 'self.throttle1 is None')
     #     else:
@@ -217,13 +170,24 @@ class Automaton(jmri.jmrit.automat.AbstractAutomaton) :
 
 
 
+# # Define one sensor listener. 
+# class ThrottleFunctionForSensorListener(java.beans.PropertyChangeListener):
+#   automaton = None  # make a spot to remember the throttle object that was passed in
+
+
+
+  
+  
+  
+  
+ 
 
 
 
 
 
-
-class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
+# class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
+class ThrottleFunctionForSensorListener(java.beans.PropertyChangeListener):
 
     global adapt
     
@@ -240,9 +204,34 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
     processingSENF = False
     processingEngOn1 = False
     
-
+    speedatSENR1 = None
+    speedatSENR2 = None
+    speedatSENF1 = None
+    speedatSENF2 = None
     
     simForStart = None
+    simRevStart = None
+    automaton = None  # make a spot to remember the throttle object that was passed in
+    
+    def setup(self, throttleAddress):
+        th = Automaton()
+        th.start()
+        #   th.setup("MS-N257E3", 3, "F1")  #horn for address 909
+        self.automaton = th
+    #   if (self.automaton == None) : 
+    #     #dprint( 'self.throttle is None in setup')
+    #   else:
+    #     #dprint( 'self.throttle is not None')
+    #   return
+    #   fwd1 = aaSetupSensors("fwd1")
+    #   fwd1.run()
+    
+#     def setup(self, throttleAddress):
+#         th = Automaton()
+#         th.start()
+#         #   th.setup("MS-N257E3", 3, "F1")  #horn for address 909
+#         self.automaton = th
+        
 #   CheckSensors = None  #make a spot to remember the throttle object that was passed in
 
 #   def setup(self,  sensorAddress):
@@ -260,51 +249,103 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
 #   #dprint( "Setup sensor ", sensorAddress)
   
     def propertyChange(self, event):
-        
-        self.direction = engineDirection
-        
-        dprint("  entered property change")
-        dprint("  propertyName" + event.propertyName)
+      
+        mprint("  entered property change")
+        mprint("propertyName" + event.propertyName)
         mprint("oldVal", event.oldValue, "newVal", event.newValue)
-#   if (event.propertyName == "MS-N257E1" or 
-#     event.propertyName == "MS+N257E1" or 
-#     event.propertyName == "MS-N257E3" or 
-#     event.propertyName == "MS+N257E3" ): 
-#     and event.newValue != 0: 
+        if event.propertyName == "property1" and event.newValue == 0: 
+            turnouts.provideTurnout("MT+10").setState(CLOSED)
+            mprint("turnouts.provideTurnout(MT+10).setState(CLOSED)") 
+        elif event.propertyName == "property1" and event.newValue == 1:
+            turnouts.provideTurnout("MT+10").setState(THROWN)
+            mprint("turnouts.provideTurnout(MT+10).setState(THROWN)")
+        elif event.propertyName == "property2" and event.newValue == 0:
+            turnouts.provideTurnout("MT+20").setState(CLOSED)
+            mprint("turnouts.provideTurnout(MT+20).setState(CLOSED)")
+        elif event.propertyName == "property2" and event.newValue == 1:
+            turnouts.provideTurnout("MT+20").setState(THROWN)
+            mprint("turnouts.provideTurnout(MT+20).setState(THROWN)")
+    
+        elif event.propertyName == "locoSetDirection" and (event.newValue == 0 or event.newValue == 1) : 
+            mprint("Set Loco Forward")
+            if (self.automaton == None) : 
+              dprint('automation is None')
+            self.automaton.setDirection(event.newValue)
+      
+        elif event.propertyName == "locoSetSpeed" and event.newValue >= 0 and event.newValue <= 1 :
+            mprint('SetSpeed')
+            self.automaton.setSpeed(event.newValue)
+        elif event.propertyName == "loco1SetSpeedZero" and event.newValue >= 0 and event.newValue <= 1 :
+            mprint('SetSpeedZero' + str(event.newValue))
+            self.automaton.setSpeed(event.newValue)
+    #     elif event.propertyName == "loco1F" and event.newValue > 0 and event.newValue <= 1 : 
+    #         mprint("Set Loco Forward event.newValue = " + str(event.newValue))
+    #         if (self.automaton == None) : 
+    #             dprint('automation is None')
+    #         self.automaton.moveLoco(True, event.newValue)
+    #     elif event.propertyName == "loco1R" and event.newValue > 0 and event.newValue <= 1 :
+    #         mprint("Set loco Reverse event.newValue = " + str(event.newValue))
+    #         self.automaton.moveLoco(False, event.newValue)
+        elif event.propertyName == "pause" and event.newValue >= 0 and event.newValue <= 10000 :   
+            mprint('event.propertyName == "pause"')
+            self.automaton.pause(0)
+    #     return 
+    #     def propertyChange(self, event):
+    #         
+    #         self.direction = engineDirection
+    #         
+    #         dprint("  entered property change")
+    #         dprint("  propertyName" + event.propertyName)
+    #         mprint("oldVal", event.oldValue, "newVal", event.newValue)
+    # #   if (event.propertyName == "MS-N257E1" or 
+    # #     event.propertyName == "MS+N257E1" or 
+    # #     event.propertyName == "MS-N257E3" or 
+    # #     event.propertyName == "MS+N257E3" ): 
+    # #     and event.newValue != 0: 
+    
+        self.direction = engineDirection
         mprint(event.propertyName , "detected at ", event.newValue , " millis")
-        if event.propertyName == "SENR1":
-            dprint("propertyName " + event.propertyName, " revStart ", event.newValue)
-            self.simRevStart = event.newValue
-            self.speedatSENR1 = U4_Constants.simSpeedSetting
-            mprint("self.speedatSENR1: ", self.speedatSENR1)
-            self.processingSENR = True
-            return
-        
-        if event.propertyName == "SENR2":
-            dprint("propertyName " + event.propertyName, " revEnd ", event.newValue)
-            self.simRevEnd = event.newValue
-            self.speedatSENR2 = U4_Constants.simSpeedSetting
-            dprint("self.speedatSENR2: ", self.speedatSENR2)
-            self.processSENR2()
-            self.processingSENR = False
-            return
-        
-        if event.propertyName == "SENF1":
-            dprint("propertyName " + event.propertyName, " timeEngOn1 ", event.newValue)
-            self.simForStart = event.newValue
-            self.speedatSENF1 = U4_Constants.simSpeedSetting
-            mprint("self.speedatSENF1: ", self.speedatSENF1)
-            self.processingSENF = True
-            return
-        
-        if event.propertyName == "SENF2":
-            dprint("propertyName " + event.propertyName, " timeEngOn2 ", event.newValue)
-            self.simForEnd = event.newValue
-            self.speedatSENF2 = U4_Constants.simSpeedSetting
-            dprint("self.speedatSENF2: ", self.speedatSENF2)
-            self.processSENF2()
-            self.processingSENF = False
-            return
+#         if event.propertyName == "SENR1":
+#             # winsound.Beep(300, 2000)
+#             print('\a')
+#             dprint("propertyName " + event.propertyName, " revStart ", event.newValue)
+#             self.simRevStart = event.newValue
+#             self.speedatSENR1 = U4_Constants.getSimSpeedSetting()
+#             mprint("self.speedatSENR1: ", self.speedatSENR1)
+#             self.processingSENR = True
+#             return
+#         
+#         if event.propertyName == "SENR2":
+#             # winsound.Beep(300, 2000)
+#             print('\a')
+#             dprint("propertyName " + event.propertyName, " revEnd ", event.newValue)
+#             self.simRevEnd = event.newValue
+#             self.speedatSENR2 = U4_Constants.getSimSpeedSetting()
+#             dprint("self.speedatSENR2: ", self.speedatSENR2)
+#             self.processSENR2()
+#             self.processingSENR = False
+#             return
+#         
+#         if event.propertyName == "SENF1":
+#             # winsound.Beep(300, 2000)
+#             print('\a')
+#             dprint("propertyName " + event.propertyName, " timeEngOn1 ", event.newValue)
+#             self.simForStart = event.newValue
+#             self.speedatSENF1 = U4_Constants.getSimSpeedSetting()
+#             mprint("self.speedatSENF1: ", self.speedatSENF1)
+#             self.processingSENF = True
+#             return
+#         
+#         if event.propertyName == "SENF2":
+#             
+#             # winsound.Beep(300, 2000)
+#             dprint("propertyName " + event.propertyName, " timeEngOn2 ", event.newValue)
+#             self.simForEnd = event.newValue
+#             self.speedatSENF2 = U4_Constants.getSimSpeedSetting()
+#             dprint("self.speedatSENF2: ", self.speedatSENF2)
+#             self.processSENF2()
+#             self.processingSENF = False
+#             return
         
 #         rev1 = aaSetupSensors("MS-N257E1", "engon1")
 #         rev1.run()
@@ -335,6 +376,7 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
 
         
         if event.propertyName == "engOn1":  # timeEngOn1
+            print('\a')  # make a sound
             dprint("propertyName" + event.propertyName, " timeEngOn1 ", event.newValue)    
             self.timeEngOn1 = event.newValue
             self.speedatEngOn1 = engineSpeed
@@ -342,7 +384,7 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
             # self.processingEngOn1 = True
             if self.direction == 'reverse': 
                 if (self.timeEngOn1 > self.timeEngOn2):
-                    lprint("ProcessingEngOn1", "self.direction", "self.direction", self.direction, "self.speedatEngOn1", self.speedatEngOn1, "self.timeEngOn1", self.timeEngOn1, "self.timeEngOn2", self.timeEngOn2)
+                    print("ProcessingEngOn1", "self.direction", "self.direction", self.direction, "self.speedatEngOn1", self.speedatEngOn1, "self.timeEngOn1", self.timeEngOn1, "self.timeEngOn2", self.timeEngOn2)
                     self.processEngOn1()
                     self.processingEngOn1 = False
                     self.processingEngOn2 = False
@@ -351,9 +393,14 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
             else:
                 lprint("Not ProcessingEngOn1 - waiting for engOn2")
             if self.processingSENF == False:
-                dprint("UPDATING TRAIN POSITION ***************************************************")
-        
+                millis = int(round(time.time() * 1000))
+                print("should UPDATING TRAIN POSITION engOn1**move to sensor 1 (lh sensor)*************************************************", millis)
+#                 self.automaton.setSpeed(0)
+#                 Main.stopEngine()                
+                self.updateTrainPosition(event.propertyName)
+
         elif event.propertyName == "engOn2":  # timeEngOn2
+            print('\a')  # make a sound
             dprint("propertyName" + event.propertyName, " timeEngOn2 ", event.newValue)
             
             # dprint("self.speedatEngOn1: ", self.speedatEngOn1)
@@ -363,7 +410,7 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
             dprint("self.speedatEngOn2: ", self.speedatEngOn2, "self.direction", self.direction)
             if self.direction == 'forwards': 
                 if (self.timeEngOn2 > self.timeEngOn1):
-                    lprint("ProcessingEngOn2", "self.direction", self.direction, "self.speedatEngOn2", self.speedatEngOn2, "self.timeEngOn1", self.timeEngOn1, "self.timeEngOn2", self.timeEngOn2)
+                    print("ProcessingEngOn2", "self.direction", self.direction, "self.speedatEngOn2", self.speedatEngOn2, "self.timeEngOn1", self.timeEngOn1, "self.timeEngOn2", self.timeEngOn2)
                     self.processEngOn2()
                     self.processingEngOn1 = False
                     self.processingEngOn2 = False
@@ -373,22 +420,30 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
                 lprint("Not ProcessingEngOn2 - waiting for engOn1")
                 
 
-#                 self.updateTrainPosition(event.propertyName)
-            return    
+#                 self.updateTrainPosition(event.propertyName)  
             if self.processingSENR == False:
-                 dprint("UPDATING TRAIN POSITION ***************************************************")
-#                 self.updateTrainPosition(event.propertyName)
-#             return
+                millis = int(round(time.time() * 1000))
+                print("UPDATING TRAIN POSITION engOn2**move to rh sensor*************************************************", millis)
+#                 self.automaton.setSpeed(0)
+#                 Main.stopEngine()
+                self.updateTrainPosition(event.propertyName)
+                return
         else:
         #         dprint( "propertyName" + event.propertyName, " newValue ", event.newValue)
         #         dprint( "stopping not calling adaption")
             return
         
-    def updateTrainPosition(self, propertyName):
-         
-        if propertyName == "MS+N257E3":
-            dprint("Updating Train Position")
-            E1.threads.getModelSetup().get_modelArcAndNodeLinkedList().getTrainsOnRoute().updateToNextSensor()
+    def updateTrainPosition(self, propertyName):       
+        dprint("Updating Train Position")
+        # T0 is the name of the engine
+        nprint("jython updateTrainPosition")
+        if propertyName == "engOn1":
+            nprint("jython updateTrainPosition engOn1")
+            E1.threads.getModelSetup().get_modelArcAndNodeLinkedList().getTrainsOnRoute().updateToNextSensor("T0", "SENF1", CreateTrainMovementDeque.graph)
+        elif propertyName == "engOn2":
+            nprint("jython updateTrainPosition engOn2")
+            E1.threads.getModelSetup().get_modelArcAndNodeLinkedList().getTrainsOnRoute().updateToNextSensor("T0", "SENR1", CreateTrainMovementDeque.graph)
+        
             
     def processSENF2(self):
         dprint("Hi in processSENF2")
@@ -406,10 +461,10 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
         dprint("self.simForEnd", self.simForEnd, "self.simForStart", self.simForStart, "For time taken" , self.simForTime)
         
         self.simDistancetravelled = 227
-        dprint("self.simDistancetravelled", self.simDistancetravelled, "self.speedatSENR1", self.speedatSENR1, "self.speedatSENR2", self.speedatSENR1)
+        dprint("self.simDistancetravelled", self.simDistancetravelled, "self.speedatSENF1", self.speedatSENF1, "self.speedatSENF2", self.speedatSENF2)
         
         #===========================================================================
-        # these global values have been set other rotines
+        # these global values have been set other routines
         #===========================================================================
         self.engineSetting = engineSpeed
         self.direction = engineDirection
@@ -420,7 +475,7 @@ class SensorListenerDetectHectors(java.beans.PropertyChangeListener):
         dprint("SENF2", "direction", self.direction)
 #         if self.direction == 'forwards':
         adaptModelForward.processMeasurement(
-                    self.simForTime , self.simDistancetravelled, self.speedatSENR2, self.min, self.max)
+                    self.simForTime , self.simDistancetravelled, self.speedatSENF2, self.min, self.max)
 #         else:
 #             adaptModelReverse.processMeasurement(
 #                     self.simForTime , self.simDistancetravelled, self.speedatSENR2, self.min, self.max)
@@ -770,32 +825,41 @@ engineDirection = "xxxx"
 # r=Automaton()
 # s=r.setup("MS-N257E3", 3, "F1")  #horn for address 909
 global adapt
-initialise = True
+initialise = False
+# # forgetting factors
+# # .95 equates to 10 measurements
+# # .995 equates to 100 measurements
 noBoxes = 10
-forgettingfactor = .99
+forgettingfactor = .95
 adaptEngineForward = AdaptionEngine(noBoxes, "EngineForwardAdaption", initialise, forgettingfactor)
 
 initialise = False
 adaptEngineReverse = AdaptionEngine(noBoxes, "EngineReverseAdaption", initialise, forgettingfactor)
 
 initialise = False
-forgettingfactor = .999
+forgettingfactor = .995  
 adaptModelForward = AdaptionSim(noBoxes, "ModelForwardAdaption", initialise, forgettingfactor)
 initialise = False
 adaptModelReverse = AdaptionSim(noBoxes, "ModelReverseAdaption", initialise, forgettingfactor)
 
+
+jlo = listenerObjects()
+# r = SensorListenerDetectHectors()
+# # r.setup(3)
+# jlo.addPropertyChangeListener(r)
+
+
 q = ThrottleFunctionForSensorListener()
 q.setup(3)
+# Main.lo.addPropertyChangeListener(q)
+jlo.addPropertyChangeListener(q)
 # r.setupThrottleFunction(q)
 
 
-Main.lo.addPropertyChangeListener(q)
+
 Main.runFSM()
 
-jlo = listenerObjects()
-r = SensorListenerDetectHectors()
-# r.setup()
-jlo.addPropertyChangeListener(r)
+
 
 
 rev1 = aaSetupSensors("MS-N257E1", "engOn1")
